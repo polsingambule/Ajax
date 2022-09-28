@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Number Validation</title>
+</head>
+<style>
+	body{
+		font-family:sans-serif;
+	}
+	#submit:hover{
+		cursor:pointer;
+	}
+</style>
+	<script>
+	   function validateNumber(){
+			let number_value = document.getElementById("number").value;
+			if(number_value == "" || number_value == " "){
+				document.getElementById("error").value="Please enter number";
+				document.getElementById("error").style.color="red";
+				return false;
+			}
+			
+			let mdn = number_value = "+91"+ number_value;
+			const apikey="key";
+			var endpoint = "https://api.numlookupapi.com/v1/validate/" + mdn + "?apikey=44kjZLGjp2uEu7stCrSSD2xQx0IztmOQ8wdqjQVF";
+
+			var xhr = new XMLHttpRequest();
+			xhr.onreadystatechange = function() {
+				if (this.readyState == 4 && this.status == 200) {
+					var response = JSON.parse(this.responseText);
+					//if(response.status !== 'success') {
+					if(response !== '') {
+						//console.log('query failed: ' + response.message);
+						document.getElementById("status").value= response.valid;
+						document.getElementById("operator").value= response.carrier;
+						document.getElementById("location").value= response.location;
+						document.getElementById("country_name").value= response.country_name;
+						//return true;
+ 					}
+
+					document.getElementById("error").innerHtml="issue";
+					console.log(response.valid);
+					console.log(response.carrier);
+					console.log(response.location);
+					console.log(response.country_name);
+					console.log('query success: ' + response);
+					return true;
+					/*
+					// Redirect
+					if(response.countryCode == "US") {
+						window.location.replace("https://google.com/");
+					}
+					if(response.countryCode == "CA") {
+						window.location.replace("https://google.ca/");
+					}*/
+				}
+			};
+			xhr.open('GET', endpoint, true);
+			xhr.send();
+	   }
+    </script>
+
+<body>
+	<form action="#" method="get" onsubmit="return false">
+
+            <h3># <u>Enter Number To Check Status</u></h3><br>
+            <span id="error"></span><br><br>
+
+            <label>Mobile Number:-</label>
+            <input type="text" name="number" id="number" /><br><br>
+
+            <label>Status:-</label>
+			<span id="status"></span><br>
+
+			<label>Operator:-</label>
+			<span id="operator"></span><br>
+
+			<label>Location:-</label>
+			<span id="location"></span><br>
+
+			<label>Country Name:-</label>
+			<span id="country_name"></span><br><br>
+
+            <input type="submit" value="Request To Check" id="submit" onclick="validateNumber();"/>
+        </form>
+</body>
+</html>
